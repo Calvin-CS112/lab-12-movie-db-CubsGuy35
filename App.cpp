@@ -13,36 +13,24 @@ using namespace bridges;
 App::App(vector<MovieActorWikidata> &movies_vector) {
     cout << "Got " << movies_vector.size() << " movies...\n";
 
-    // iterate through the vector and gather the actors into each movie record.
-    // TODO: for loop here.
-
-        // Algorithm:
-        //   Either use a one line solution to look for the movie in movies_by_name,
-        //     and if found, add the actor's name to the set,   OR,
-        //
-        //   call find() on movies_by_name for the movie name
-        //           (accessed by it->getMovieName()).  This call returns an iterator.
-        //   if not found:
-        //     create an empty set of actors.
-        //     insert the actors' name in the set. Get the actor's name from it->getActorName().
-        //     create a pair, containing the movie name and the set of actors.
-        //     insert this new pair into movies_by_name.
-        //   else
-        //     add the actor's name into the set for that movie.
+    for (int i = 0; i < movies_vector.size(); i++) {
+        movies_by_name[movies_vector[i].getMovieName()].insert(
+            movies_vector[i].getActorName());
+    }
 }
 
 void App::showAllMovies() {
-    // TODO:
-    // Algorithm:
-    //   loop through movies_by_name.
-    //     print the movie name.
-    //     call showActorsInaMovie(), passing in the iterator referring to the movie.
+    for (db_iter it = movies_by_name.begin(); it != movies_by_name.end();
+         it++) {
+        cout << it->first << endl;
+        showActorsInAMovie(it);
+    }
 }
 
 void App::showActorsInAMovie(const db_iter &movie_it) {
-    // TODO:
-    // You can figure out this algorithm...
-
+    for (set<string>::iterator it = movie_it->second.begin();it != movie_it->second.end(); it++) {
+        cout << *it << endl;
+    }
 }
 
 void App::getMovieNameAndShowActors() {
@@ -57,9 +45,7 @@ void App::getMovieNameAndShowActors() {
     // else, print out a nice message saying the movie was not found.
 }
 
-
 void App::showAllMoviesForAnActor() {
-
     string actor_name;
     cout << "Enter an actor name to show all movies for that actor: ";
     cin.ignore();
