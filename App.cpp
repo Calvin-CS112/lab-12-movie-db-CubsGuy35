@@ -39,10 +39,13 @@ void App::getMovieNameAndShowActors() {
     cin.ignore();
     getline(cin, movie_name);
 
-    // Algorithm:
-    // use find() on movies_by_name to search for movie_name.
-    // if found, print out the actors.
-    // else, print out a nice message saying the movie was not found.
+    // uses find() on movies_by_name to search for movie_name.
+    // if found, prints out the actors. Otherwise, prints out error message.
+    if (movies_by_name.find(movie_name) != movies_by_name.end()) {
+        showActorsInAMovie(movies_by_name.find(movie_name));
+    } else {
+        cout << "Movie not found... " << endl;
+    }
 }
 
 void App::showAllMoviesForAnActor() {
@@ -51,17 +54,20 @@ void App::showAllMoviesForAnActor() {
     cin.ignore();
     getline(cin, actor_name);
 
-    // TODO:
-    // Algorithm:
-    // create a variable, movies_by_actor, that is a set of strings.
-    // loop through movies_by_name.
-    //   use find(actor_name) on the set of actors for each movie. (The set of
-    //      actors is it->second).
-    //   if found, add the movie name to movies_by_name. (the movie name is in
-    //      it->first)
-
-    // TODO:
-    // loop through movies_by_actor and print out each item.
+    // loops through all movies, if a movie contains the actor, add the title to
+    // the set movies_by_actor
+    set<string> movies_by_actor;
+    for (db_iter it = movies_by_name.begin(); it != movies_by_name.end();
+         ++it) {
+        if (it->second.find(actor_name) != it->second.end()) {
+            movies_by_actor.insert(it->first);
+        }
+    }
+    // prints out all movies in set
+    for (set<string>::iterator it = movies_by_actor.begin();
+         it != movies_by_actor.end(); ++it) {
+        cout << *it << endl;
+    }
 }
 
 void App::run() {
